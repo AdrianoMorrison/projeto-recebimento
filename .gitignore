@@ -1,0 +1,48 @@
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+
+# SQLite
+*.sqlite3
+
+# Distribuição / build
+build/
+dist/
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+
+# Executáveis e arquivos gerados
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints
+
+# Arquivos de IDE/editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos específicos do PyInstaller (se você usa)
+*.spec
+
+# Arquivos de pacotes
+packages.txt
