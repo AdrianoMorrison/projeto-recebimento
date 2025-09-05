@@ -194,31 +194,28 @@ DECLARE @CHAVE AS VARCHAR(44) = ?
 	LEFT JOIN LOJA_ENTRADAS FAT
 		ON FAT.CHAVE_NFE = A.CHAVE_NFE
 
-	
 CROSS APPLY (
-    SELECT TOP 1 DIA_ENTRADA_LOJA
+    -- O subselect agora busca o valor MÁXIMO (MAX) de todas as datas encontradas
+    SELECT MAX(X.DIA_ENTRADA_LOJA) AS DIA_ENTRADA_LOJA
     FROM (
-        SELECT TC.DIA_ENTRADA_LOJA, 1 AS prioridade
-        FROM TEMP_COD TC
-        WHERE 
-			TC.ORDEM_PRODUCAO = A.NUMERO_DOCUMENTO
-			AND TC.PRODUTO = A.PRODUTO
-			AND TC.COR_PRODUTO = A.COR
+        -- Primeiro, selecionamos as datas da primeira tabela (TEMP_COD)
+        -- baseando-se apenas em PRODUTO e COR
+        SELECT TC.DIA_ENTRADA_LOJA
+        FROM TEMP_COD AS TC
+        WHERE TC.PRODUTO = A.PRODUTO
+          AND TC.COR_PRODUTO = A.COR
 
         UNION ALL
 
-        SELECT TC1.DIA_ENTRADA_LOJA, 2 AS prioridade
-        FROM TEMP_COD1 TC1
-        WHERE TC1.ORDEM_PRODUCAO = A.NUMERO_DOCUMENTO
-		AND TC1.PRODUTO = A.PRODUTO
-			AND TC1.COR_PRODUTO = A.COR
-
-
+        -- Depois, unimos com as datas da segunda tabela (TEMP_COD1)
+        -- também baseando-se apenas em PRODUTO e COR
+        SELECT TC1.DIA_ENTRADA_LOJA
+        FROM TEMP_COD1 AS TC1
+        WHERE TC1.PRODUTO = A.PRODUTO
+          AND TC1.COR_PRODUTO = A.COR
     ) AS X
-    ORDER BY prioridade, DIA_ENTRADA_LOJA DESC
-) AS TF (DIA_ENTRADA_LOJA)
 
-
+) AS TF -- (DIA_ENTRADA_LOJA) continua sendo o nome do campo resultante
 
     """
     with get_connection() as conn:
